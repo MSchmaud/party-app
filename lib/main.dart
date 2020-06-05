@@ -51,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _msg = "You have pushed the button this many times:";
 
   void _incrementCounter() {
     setState(() {
@@ -60,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      if (_counter == 69) {_msg = "NICE NICE NICE NICE NICE NICE NICE";}
+      else {_msg = "You have pushed the button this many times:";}
     });
   }
 
@@ -98,10 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              _msg,
             ),
             Text(
-              '$_counter',
+              '$_counter/69',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
