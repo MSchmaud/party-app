@@ -8,6 +8,9 @@ class InvitesPage extends StatelessWidget {
     final _height = MediaQuery.of(ctxt).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Invites'),
+      ),
       body: Container(
         color: Theme.of(ctxt).backgroundColor,
         height: _height,
@@ -15,7 +18,9 @@ class InvitesPage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Text("Invites Page"),
+              
+              // EVERYTHING IN INVITES PAGE
+
             ],
           ),
         ),
