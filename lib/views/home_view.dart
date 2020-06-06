@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:partyApp/widgets/provider.dart';
+import 'package:partyApp/services/auth_service.dart';
 
 class Home extends StatelessWidget{
   @override
@@ -12,6 +14,21 @@ class Home extends StatelessWidget{
           child: Column(
             children: <Widget>[
               Text("Home Page"),
+
+              // Sign out button
+              IconButton(
+                icon: Icon(Icons.undo),
+                onPressed: () async {
+                  try{
+                    AuthService auth = Provider.of(ctxt).auth;
+                    await auth.signOut();
+                    print("signed Out!");
+                  } catch (e){
+                    print(e);
+                  }
+                }
+              ),
+
             ]
           ),
         ),

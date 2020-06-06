@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/views/sign_up_view.dart';
 import 'package:partyApp/views/first_view.dart';
 import 'package:partyApp/views/home_view.dart';
-import 'package:partyApp/services/auth_service.dart';
+import 'package:partyApp/widgets/provider.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -49,15 +51,3 @@ class HomeController extends StatelessWidget {
   }
 }
 
-// This widget alerts all child widgets that the state has changed
-class Provider extends InheritedWidget {
-  final AuthService auth;
-  Provider({Key key, Widget child, this.auth,}) : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) {
-    return true;
-  }
-
-  static Provider of(BuildContext ctxt) => (ctxt.dependOnInheritedWidgetOfExactType<Provider>());
-}
