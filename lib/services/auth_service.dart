@@ -31,9 +31,14 @@ class AuthService {
     return _firebaseAuth.signOut();
   }
 
+  // Reset password
+  Future sendPasswordResetEmail(String email) async {
+    return _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
 }
 
-// CLASSES FOR VALIDATION OF FORM FIELDS
+// CLASSES FOR VALIDATION OF FORM FIELDS ===================================================================
 class EmailValidator {
   static String validate(String value) {
     if(value.isEmpty) {
