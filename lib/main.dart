@@ -46,6 +46,10 @@ class HomeController extends StatelessWidget {
           return signedIn ? Home() : FirstView();   // If signed in, takes them to home, if not, takes them to first view
         }
         return CircularProgressIndicator();
-      }
+    
+    }
+    );
+  }
+}
 
 
