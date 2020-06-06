@@ -1,38 +1,67 @@
 import 'package:flutter/material.dart';
+import "package:partyApp/views/acc_page.dart";
 import 'package:partyApp/widgets/provider.dart';
 import 'package:partyApp/services/auth_service.dart';
 
-class Home extends StatelessWidget{
+class Home extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeState();
+  }
+}
+
+class _HomeState extends State<Home>{
+
+  int _currentIndex = 0;
+  final List<Widget> _children = [
+    AccountPage(),
+    AccountPage(),
+    AccountPage(),
+  ];
+
   @override
   Widget build(BuildContext ctxt){
     return Scaffold(
-      body:  Container(
-        color: Theme.of(ctxt).backgroundColor,
-        height: MediaQuery.of(ctxt).size.height,
-        width: MediaQuery.of(ctxt).size.width,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Text("Home Page"),
-
-              // Sign out button
-              IconButton(
-                icon: Icon(Icons.undo),
-                onPressed: () async {
-                  try{
-                    AuthService auth = Provider.of(ctxt).auth;
-                    await auth.signOut();
-                    print("signed Out!");
-                  } catch (e){
-                    print(e);
-                  }
-                }
-              ),
-
-            ]
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.person),
+            title: new Text("Account"),
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.language),
+            title: new Text('Swipe'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            title: Text("Invites")
+          ),
+        ]
       ),
     );
   }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 }
+
+
+// Sign out button
+              //IconButton(
+                //icon: Icon(Icons.undo),
+                //onPressed: () async {
+                  //try{
+                    //AuthService auth = Provider.of(ctxt).auth;
+                    //await auth.signOut();
+                    //print("signed Out!");
+                  //} catch (e){
+                    //print(e);
+                  //}
+                //}
+              //),
