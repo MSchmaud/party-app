@@ -32,3 +32,31 @@ class AuthService {
   }
 
 }
+
+// CLASSES FOR VALIDATION OF FORM FIELDS
+class EmailValidator {
+  static String validate(String value) {
+    if(value.isEmpty) {
+      return "Email can't be empty";
+    }
+    return null;
+  }
+}
+
+class UsernameValidator {
+  static String validate(String value) {
+    if(value.isEmpty) {
+      return "Username can't be empty";
+    }
+    return null;
+  }
+}
+
+class PasswordValidator {
+  static String validate(String value) {
+    if(value.isEmpty) {
+      return "Password can't be empty";
+    }
+    return null;
+  }
+}

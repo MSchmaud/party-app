@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/widgets/provider.dart';
 
 enum AuthFormType {signIn, signUp}
@@ -36,24 +37,37 @@ class _SignUpViewState extends State<SignUpView> {
     }
   }
 
-  // SUBMIT BUTTON METHOD
-  void submit() async {
+  // Check for field validation
+  bool validate() {
     final form = formKey.currentState;
     form.save();
-    try {
-      final auth = Provider.of(context).auth;
-      if(authFormType == AuthFormType.signIn) {
-        String uid = await auth.signInWithEmailAndPassword(_email, _password);
-        print("Signed In with ID $uid");
-        Navigator.of(context).pushReplacementNamed('/home');
-      }else{
-        String uid = await auth.createUserWithEmailAndPassword(_email, _password, _username);
-        print("Signed up with ID $uid");
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
-    } catch (e){
-      print(e);
+    if(form.validate()){
+      form.save();
+      return true;
+    }else {
+      return false;
     }
+  }
+
+  // SUBMIT BUTTON METHOD
+  void submit() async {
+    if(validate()){
+      try {
+        final auth = Provider.of(context).auth;
+        if(authFormType == AuthFormType.signIn) {
+          String uid = await auth.signInWithEmailAndPassword(_email, _password);
+          print("Signed In with ID $uid");
+          Navigator.of(context).pushReplacementNamed('/home');
+        }else{
+          String uid = await auth.createUserWithEmailAndPassword(_email, _password, _username);
+          print("Signed up with ID $uid");
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
+      } catch (e){
+      print(e);
+      }
+    }
+    
     
   }
 
@@ -103,30 +117,31 @@ class _SignUpViewState extends State<SignUpView> {
     if(authFormType == AuthFormType.signUp){
       textFields.add(
         TextFormField(
+          validator: UsernameValidator.validate,
           style: TextStyle(fontSize: 22.0, color: Theme.of(context).primaryColor),
           decoration: buildSignUpInputDecoration("Username"),
           onSaved: (value) => _username = value,
         ),
       );
     }
-    
-    // Spacing
+
     textFields.add(SizedBox(height: 20));
 
     // add email and password
     textFields.add(
       TextFormField(
+        validator: EmailValidator.validate,
         style: TextStyle(fontSize: 22.0, color: Theme.of(context).primaryColor),
         decoration: buildSignUpInputDecoration("Email"),
         onSaved: (value) => _email = value,
       ),
     );
-    
-    // Spacing
+
     textFields.add(SizedBox(height: 20));
 
     textFields.add(
       TextFormField(
+        validator: PasswordValidator.validate,
         style: TextStyle(fontSize: 22.0, color: Theme.of(context).primaryColor),
         decoration: buildSignUpInputDecoration("Password"),
         obscureText: true,

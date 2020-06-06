@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Class for choosing where to send the user on opening the app
 class HomeController extends StatelessWidget {
   @override
   Widget build(BuildContext ctxt) {
