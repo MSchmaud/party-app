@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:partyApp/views/acc_page.dart";
+import "package:partyApp/views/swipe_page.dart";
+import "package:partyApp/views/invites_page.dart";
 
 class Home extends StatefulWidget {
   @override
@@ -13,8 +15,8 @@ class _HomeState extends State<Home>{
   int _currentIndex = 0;
   final List<Widget> _children = [
     AccountPage(),
-    AccountPage(),
-    AccountPage(),
+    SwipePage(),
+    InvitesPage(),
   ];
 
   @override
@@ -48,18 +50,3 @@ class _HomeState extends State<Home>{
     });
   }
 }
-
-
-// Sign out button
-              //IconButton(
-                //icon: Icon(Icons.undo),
-                //onPressed: () async {
-                  //try{
-                    //AuthService auth = Provider.of(ctxt).auth;
-                    //await auth.signOut();
-                    //print("signed Out!");
-                  //} catch (e){
-                    //print(e);
-                  //}
-                //}
-              //),
