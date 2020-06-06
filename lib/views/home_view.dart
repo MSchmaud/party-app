@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import "package:partyApp/views/acc_page.dart";
-import 'package:partyApp/widgets/provider.dart';
-import 'package:partyApp/services/auth_service.dart';
 
 class Home extends StatefulWidget {
   @override

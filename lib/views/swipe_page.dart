@@ -15,7 +15,9 @@ class SwipePage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Text("Swipe Page"),
+              Text("Swipe Page",
+              style: TextStyle(),
+              ),
             ],
           ),
         ),
