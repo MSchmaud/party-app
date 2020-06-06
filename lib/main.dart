@@ -47,7 +47,5 @@ class HomeController extends StatelessWidget {
         }
         return CircularProgressIndicator();
       }
-    );
-  }
-}
+
 
