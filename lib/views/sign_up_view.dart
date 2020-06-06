@@ -21,7 +21,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   // Formkey and string global variables
   final formKey = GlobalKey<FormState>();
-  String _email, _password, _username;
+  String _email, _password, _username, _error;
 
   // METHOD FOR SWITCHING STATE
   void switchFormState(String state) {
@@ -64,7 +64,10 @@ class _SignUpViewState extends State<SignUpView> {
           Navigator.of(context).pushReplacementNamed('/home');
         }
       } catch (e){
-      print(e);
+        setState(() {
+          _error = e.message;
+        });
+        print(e);
       }
     }
     
@@ -85,7 +88,9 @@ class _SignUpViewState extends State<SignUpView> {
         child: SafeArea(
           child: Column(
             children: <Widget> [
-              SizedBox(height: _height * 0.05),
+              SizedBox(height: _height * 0.025),
+              showAlert(),
+              SizedBox(height: _height * 0.025),
               buildHeaderText(),
               SizedBox(height: _height * 0.05),
 
@@ -113,7 +118,7 @@ class _SignUpViewState extends State<SignUpView> {
   List<Widget> buildInputs() {
     List<Widget> textFields = [];
 
-    // If we are in sign up state add username
+    // ADD USERNAME IF IN SIGN UP STATE
     if(authFormType == AuthFormType.signUp){
       textFields.add(
         TextFormField(
@@ -127,7 +132,7 @@ class _SignUpViewState extends State<SignUpView> {
 
     textFields.add(SizedBox(height: 20));
 
-    // add email and password
+    // ADD EMAIL
     textFields.add(
       TextFormField(
         validator: EmailValidator.validate,
@@ -139,6 +144,7 @@ class _SignUpViewState extends State<SignUpView> {
 
     textFields.add(SizedBox(height: 20));
 
+  // ADD PASSWORD
     textFields.add(
       TextFormField(
         validator: PasswordValidator.validate,
@@ -221,6 +227,39 @@ class _SignUpViewState extends State<SignUpView> {
          },
       ),
     ];
+  }
+
+  // SHOW ALERT METHOD =======================================================================
+  Widget showAlert() {
+    if(_error != null){
+      return Container(
+        color: Colors.red,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.error_outline),
+            ),
+            Expanded(child: Text(_error)),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  setState(() {
+                    _error = null;
+                  });
+                },
+              ),
+            ),
+            
+          ],
+        ),
+      );
+    }
+    return SizedBox(height: 0.0);
   }
 
 }

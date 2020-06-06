@@ -48,6 +48,12 @@ class UsernameValidator {
     if(value.isEmpty) {
       return "Username can't be empty";
     }
+    if(value.length < 4){
+      return "Username must be at least 4 characters long";
+    }
+    if(value.length > 50){
+      return "Username must be less than 50 characters long";
+    }
     return null;
   }
 }
