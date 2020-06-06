@@ -32,8 +32,55 @@ class AccountPage extends StatelessWidget {
                   }
                 }
               ),
+
+              // DO ALL ACCOUNT STUFF HERE
+
+              RaisedButton(
+                color: Theme.of(ctxt).primaryColor,
+                child: Text(
+                  "My Parties"
+                ),
+                onPressed: () {
+                  Navigator.push(ctxt, MaterialPageRoute(builder: (context) => PartyList()));
+                }
+              ),
+
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// PAGE FOR THE PARTY LIST ROUTE
+class PartyList extends StatelessWidget {
+  @override
+  Widget build(BuildContext ctxt) {
+
+    final _width = MediaQuery.of(ctxt).size.width;
+    final _height = MediaQuery.of(ctxt).size.height;
+
+    return Scaffold(
+      body: Container(
+        color: Theme.of(ctxt).backgroundColor,
+        height: _height,
+        width: _width,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Text("Party List", style: TextStyle(color: Colors.white)),
+              RaisedButton(
+                color: Theme.of(ctxt).primaryColor,
+                child: Text(
+                  "Back"
+                ),
+                onPressed: () {
+                  Navigator.pop(ctxt);
+                }
+              ),
+            ]
+          )
         ),
       ),
     );
