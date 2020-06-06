@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/widgets/provider.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 enum AuthFormType {signIn, signUp, reset}
 
@@ -112,8 +113,6 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                 ),
               ),
-              
-
             ],
           ),
         ),
@@ -217,6 +216,7 @@ class _SignUpViewState extends State<SignUpView> {
   List<Widget> buildButtons() {
     String _switchButtonText, _newFormState, _submitButtonText;
     bool _showForgotPassword = false;
+    bool _showSocial = true;
 
     if(authFormType == AuthFormType.signIn){
       _switchButtonText = "Create New Account";
@@ -227,6 +227,7 @@ class _SignUpViewState extends State<SignUpView> {
       _switchButtonText = "Return to Sign In";
       _newFormState = "signIn";
       _submitButtonText = "Submit";
+      _showSocial = false;
     }else{
       _switchButtonText = "Have an Account? Sign In";
       _newFormState = "signIn";
@@ -257,6 +258,7 @@ class _SignUpViewState extends State<SignUpView> {
            switchFormState(_newFormState);
          },
       ),
+      buildSocialIcons(_showSocial),
     ];
   }
 
@@ -308,6 +310,22 @@ class _SignUpViewState extends State<SignUpView> {
       );
     }
     return SizedBox(height: 0.0);
+  }
+
+  // BUILD SOCIAL ICONS METHOD ====================================================================
+  Widget buildSocialIcons(bool visible) {
+    final _auth = Provider.of(context).auth;
+    return Visibility(
+      child: Column(
+        children: <Widget>[
+          Divider(color: Colors.white,),
+          SizedBox(height: 10),
+          // Google sign in button supposec to be here but flutter is a dirty hoe and wont work
+        ],
+      ),
+      visible: visible,
+    );
+    
   }
 
 }
