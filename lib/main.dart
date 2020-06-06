@@ -16,11 +16,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: "Party App",
         theme: ThemeData(
-          primarySwatch: Colors.pink,
+          primaryColor: Colors.pink[800],
+          backgroundColor: Colors.grey[800], 
         ),
         home: HomeController(),
         routes: <String, WidgetBuilder>{
-          '/signUp': (BuildContext ctxt) => SignUpView(),
+          '/signUp': (BuildContext ctxt) => SignUpView(authFormType: AuthFormType.signUp),
+          '/signIn': (BuildContext ctxt) => SignUpView(authFormType: AuthFormType.signIn),
           '/home': (BuildContext ctxt) => HomeController(),
         },
       ),
