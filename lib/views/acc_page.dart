@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/widgets/provider.dart';
+import 'package:partyApp/models/party.dart';
+import 'package:intl/intl.dart';
 
+// Account page ======================================================================
 class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext ctxt){
@@ -37,7 +40,7 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
 
-              // DO ALL ACCOUNT STUFF HERE
+              // DO ALL ACCOUNT STUFF HERE //////////////////////////////////
 
               RaisedButton(
                 color: Theme.of(ctxt).primaryColor,
@@ -57,11 +60,13 @@ class AccountPage extends StatelessWidget {
   }
 }
 
-// PAGE FOR THE PARTY LIST ROUTE
+// PAGE FOR THE PARTY LIST ROUTE ===========================================================================
 class PartyList extends StatelessWidget {
 
-  final List<String> partiesList = [
-    "Party 1", "Party 2", "Party 3", "Party 4"
+  final List<Party> partiesList = [
+    Party("Party 1", DateTime.now(), "Plainfield", 50, "Description goes here"),
+    Party("Party 2", DateTime.now(), "Naperville", 10, "Description goes here"),
+    Party("Party 3", DateTime.now(), "Romeoville", 100, "Description goes here"),
   ];
 
   @override
@@ -78,7 +83,7 @@ class PartyList extends StatelessWidget {
             icon: Icon(Icons.add),
             tooltip: 'Go Back',
             onPressed: () {
-              // ADD A NEW CARD
+              // ADD A NEW CARD ///////////////////////////////////
             },
           ),
         ]
@@ -90,20 +95,47 @@ class PartyList extends StatelessWidget {
         child: SafeArea(
           child: new ListView.builder(
             itemCount: partiesList.length,
-            itemBuilder: (BuildContext ctxt, int index) {
-              return Container(
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      Text(index.toString()),
-                      Text(partiesList[index]),
-                    ],
-                  )
-                ),
-              );
-            }
+            itemBuilder: (BuildContext ctxt, int index) => buildPartyCard(ctxt, index),
           ),
         ),
+      ),
+    );
+  }
+
+  // Widget for the physical card ---------------------------------------------
+  Widget buildPartyCard(BuildContext ctxt, int index) {
+    final party = partiesList[index];
+    return Container(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              Text(party.title, style: TextStyle(fontSize: 30.0)),
+              Padding(
+                padding: EdgeInsets.only(top: 12.0, bottom: 6.0),
+                child: Text("${DateFormat('dd/MM/yyyy').format(party.date)} @ ${DateFormat('hh:mm').format(party.date)}"),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 6.0, bottom: 12.0),
+                child: Text(party.location),
+              ),
+
+              
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(party.description),
+              ),
+              
+              Row(
+                children: <Widget>[
+                  Icon(Icons.person),
+                  Text(party.population.toString()),
+                ],
+              ),   
+            ],
+          ),
+        )
       ),
     );
   }
