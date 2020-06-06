@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/widgets/provider.dart';
 
-enum AuthFormType {signIn, signUp}
+enum AuthFormType {signIn, signUp, reset}
 
 class SignUpView extends StatefulWidget {
   final AuthFormType authFormType;
@@ -21,7 +21,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   // Formkey and string global variables
   final formKey = GlobalKey<FormState>();
-  String _email, _password, _username, _error;
+  String _email, _password, _username, _warning;
 
   // METHOD FOR SWITCHING STATE
   void switchFormState(String state) {
@@ -49,7 +49,7 @@ class _SignUpViewState extends State<SignUpView> {
     }
   }
 
-  // SUBMIT BUTTON METHOD
+  // SUBMIT BUTTON METHOD ===================================================================
   void submit() async {
     if(validate()){
       try {
@@ -58,6 +58,13 @@ class _SignUpViewState extends State<SignUpView> {
           String uid = await auth.signInWithEmailAndPassword(_email, _password);
           print("Signed In with ID $uid");
           Navigator.of(context).pushReplacementNamed('/home');
+        }else if(authFormType == AuthFormType.reset){
+          await auth.sendPasswordResetEmail(_email);
+          print("Password Reset email sent");
+          _warning = "A password reset link has been sent to $_email";
+          setState(() {
+            authFormType = AuthFormType.signIn;
+          });
         }else{
           String uid = await auth.createUserWithEmailAndPassword(_email, _password, _username);
           print("Signed up with ID $uid");
@@ -65,7 +72,7 @@ class _SignUpViewState extends State<SignUpView> {
         }
       } catch (e){
         setState(() {
-          _error = e.message;
+          _warning = e.message;
         });
         print(e);
       }
@@ -74,6 +81,7 @@ class _SignUpViewState extends State<SignUpView> {
     
   }
 
+  // MAIN BUILD METHOD ----------------------------------------------------------------------------------
   @override
   Widget build(BuildContext ctxt) {
 
@@ -111,12 +119,25 @@ class _SignUpViewState extends State<SignUpView> {
         ),
       ),
     );
-    
   }
+  // -------------------------------------------------------------------------------------------
 
   // Build Input method =================================================================
   List<Widget> buildInputs() {
     List<Widget> textFields = [];
+
+    if(authFormType == AuthFormType.reset){
+      textFields.add(
+        TextFormField(
+          validator: EmailValidator.validate,
+          style: TextStyle(fontSize: 22.0),
+          decoration: buildSignUpInputDecoration("Email"),
+          onSaved: (value) => _email = value,
+        ),
+      );
+      textFields.add(SizedBox(height: 20));
+      return textFields;
+    }
 
     // ADD USERNAME IF IN SIGN UP STATE
     if(authFormType == AuthFormType.signUp){
@@ -177,6 +198,8 @@ class _SignUpViewState extends State<SignUpView> {
     String _headerText;
     if(authFormType == AuthFormType.signUp){
       _headerText = "Create New Account";
+    }else if(authFormType == AuthFormType.reset){
+      _headerText = "Reset Password";
     }else{
       _headerText = "Sign in";
     }
@@ -193,13 +216,19 @@ class _SignUpViewState extends State<SignUpView> {
   // BUILD BUTTONS METHOD ========================================================================
   List<Widget> buildButtons() {
     String _switchButtonText, _newFormState, _submitButtonText;
+    bool _showForgotPassword = false;
 
     if(authFormType == AuthFormType.signIn){
       _switchButtonText = "Create New Account";
       _newFormState = "signUp";
       _submitButtonText = "Sign In";
+      _showForgotPassword = true;
+    }else if(authFormType == AuthFormType.reset){
+      _switchButtonText = "Return to Sign In";
+      _newFormState = "signIn";
+      _submitButtonText = "Submit";
     }else{
-      _switchButtonText = "Already Have an Account? Sign In";
+      _switchButtonText = "Have an Account? Sign In";
       _newFormState = "signIn";
       _submitButtonText = "Sign Up";
     }
@@ -220,6 +249,8 @@ class _SignUpViewState extends State<SignUpView> {
           })
       ),
 
+      showForgotPassword(_showForgotPassword),
+
       FlatButton(
          child: Text(_switchButtonText, style: TextStyle(color: Colors.white),),
          onPressed: () {
@@ -229,9 +260,26 @@ class _SignUpViewState extends State<SignUpView> {
     ];
   }
 
+  // FORGOT PASSWORD BUILDER METHOD
+  Widget showForgotPassword(bool visible) {
+    return Visibility(
+      child: FlatButton(
+        child: Text("Forgot Password?", style: TextStyle(color: Colors.white),
+        ),
+        onPressed: () {
+          setState(() {
+            authFormType = AuthFormType.reset;
+          });
+        },
+      ),
+      visible: visible,
+    );
+    
+  }
+
   // SHOW ALERT METHOD =======================================================================
   Widget showAlert() {
-    if(_error != null){
+    if(_warning != null){
       return Container(
         color: Colors.red,
         width: double.infinity,
@@ -242,14 +290,14 @@ class _SignUpViewState extends State<SignUpView> {
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.error_outline),
             ),
-            Expanded(child: Text(_error)),
+            Expanded(child: Text(_warning)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
                   setState(() {
-                    _error = null;
+                    _warning = null;
                   });
                 },
               ),
