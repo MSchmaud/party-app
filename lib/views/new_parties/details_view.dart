@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:partyApp/models/party.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:partyApp/widgets/provider.dart';
 
 class NewPartyDetailsView extends StatelessWidget {
   final db = Firestore.instance;
@@ -53,14 +55,17 @@ class NewPartyDetailsView extends StatelessWidget {
               Text("Title: ${party.title}"),
               Text("Theme: ${party.theme}"),
               Text("Location: ${party.location}"),
-              Text("Date: ${party.date}"),
+              Text("Date: ${DateFormat('MM/d/yyyy').format(party.date)}"),
               Text("Attendance: ${party.population}"),
               Text("Description: ${party.description}"),
               RaisedButton(
                 child: Text("Continue"),
                 onPressed: () async {
                   // Save data to firebase
+                  final uid = await Provider.of(ctxt).auth.getCurrentUID();
+
                   await db.collection("parties").add(party.toJson());
+                  await db.collection("userData").document(uid).collection("parties").add(party.toJson());
 
                   party.description = _descriptionController.text;
                   party.population = int.parse(_attendanceController.text);

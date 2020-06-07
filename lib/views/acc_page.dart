@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/views/new_parties/title_view.dart';
 import 'package:partyApp/widgets/provider.dart';
-import 'package:partyApp/models/party.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:partyApp/models/party.dart';
 
 // Account page ======================================================================
 class AccountPage extends StatelessWidget {
@@ -64,18 +65,12 @@ class AccountPage extends StatelessWidget {
 // PAGE FOR THE PARTY LIST ROUTE ===========================================================================
 class PartyList extends StatelessWidget {
 
-  final List<Party> partiesList = [
-    Party("Party 1", DateTime.now(), "Plainfield", 50, "Description goes here", "Theme"),
-    Party("Party 2", DateTime.now(), "Naperville", 10, "Description goes here", "Theme"),
-    Party("Party 3", DateTime.now(), "Romeoville", 100, "Description goes here", "Theme"),
-  ];
-
   @override
   Widget build(BuildContext ctxt) {
 
     final _width = MediaQuery.of(ctxt).size.width;
     final _height = MediaQuery.of(ctxt).size.height;
-    final newParty = new Party("Party Title", DateTime.now(), "Location", 50, "Description", "Theme");
+    final newParty = new Party("Party Title", DateTime.now(), "Location", 50, "Description", "Theme",);
 
     return Scaffold(
       appBar: AppBar(
@@ -98,44 +93,58 @@ class PartyList extends StatelessWidget {
         height: _height,
         width: _width,
         child: SafeArea(
-          child: new ListView.builder(
-            itemCount: partiesList.length,
-            itemBuilder: (BuildContext ctxt, int index) => buildPartyCard(ctxt, index),
+          child: StreamBuilder(
+            stream: getUsersPartiesStreamSnapshots(ctxt),
+            builder: (context, snapshot) {
+              if(!snapshot.hasData) {
+                return const Text("Loading...");
+              }
+              return new ListView.builder(
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (BuildContext ctxt, int index) => buildPartyCard(ctxt, snapshot.data.documents[index]),
+              );
+            }
           ),
         ),
       ),
     );
   }
 
+  // Stream to get data from firebase
+  Stream<QuerySnapshot> getUsersPartiesStreamSnapshots(BuildContext ctxt) async* {
+    final uid = await Provider.of(ctxt).auth.getCurrentUID();
+    yield* Firestore.instance.collection('userData').document(uid).collection('parties').snapshots();
+  }
+
   // Widget for the physical card ---------------------------------------------
-  Widget buildPartyCard(BuildContext ctxt, int index) {
-    final party = partiesList[index];
+  Widget buildPartyCard(BuildContext ctxt, DocumentSnapshot party) {
     return Container(
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              Text(party.title, style: TextStyle(fontSize: 30.0)),
+              Text(party['title'], style: TextStyle(fontSize: 30.0)),
+              Text("Theme: " + party['theme'], style: TextStyle(fontSize: 22.0)),
               Padding(
                 padding: EdgeInsets.only(top: 12.0, bottom: 6.0),
-                child: Text("${DateFormat('dd/MM/yyyy').format(party.date)} @ ${DateFormat('hh:mm').format(party.date)}"),
+                child: Text("${DateFormat('dd/MM/yyyy').format(party['date'].toDate())} @ ${DateFormat('hh:mm').format(party['date'].toDate())}"),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 6.0, bottom: 12.0),
-                child: Text(party.location),
+                child: Text(party['location']),
               ),
 
               
               Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text(party.description),
+                child: Text(party['description']),
               ),
               
               Row(
                 children: <Widget>[
                   Icon(Icons.person),
-                  Text(party.population.toString()),
+                  Text(party['attendance'].toString()),
                 ],
               ),   
             ],
