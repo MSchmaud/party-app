@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
+import 'package:partyApp/views/new_parties/title_view.dart';
 import 'package:partyApp/widgets/provider.dart';
 import 'package:partyApp/models/party.dart';
 import 'package:intl/intl.dart';
@@ -64,9 +65,9 @@ class AccountPage extends StatelessWidget {
 class PartyList extends StatelessWidget {
 
   final List<Party> partiesList = [
-    Party("Party 1", DateTime.now(), "Plainfield", 50, "Description goes here"),
-    Party("Party 2", DateTime.now(), "Naperville", 10, "Description goes here"),
-    Party("Party 3", DateTime.now(), "Romeoville", 100, "Description goes here"),
+    Party("Party 1", DateTime.now(), "Plainfield", 50, "Description goes here", "Theme"),
+    Party("Party 2", DateTime.now(), "Naperville", 10, "Description goes here", "Theme"),
+    Party("Party 3", DateTime.now(), "Romeoville", 100, "Description goes here", "Theme"),
   ];
 
   @override
@@ -74,6 +75,7 @@ class PartyList extends StatelessWidget {
 
     final _width = MediaQuery.of(ctxt).size.width;
     final _height = MediaQuery.of(ctxt).size.height;
+    final newParty = new Party("Party Title", DateTime.now(), "Location", 50, "Description", "Theme");
 
     return Scaffold(
       appBar: AppBar(
@@ -81,9 +83,12 @@ class PartyList extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            tooltip: 'Go Back',
+            tooltip: 'New Party',
             onPressed: () {
-              // ADD A NEW CARD ///////////////////////////////////
+              Navigator.push(
+                ctxt,
+                 MaterialPageRoute(builder: (ctxt) => NewPartyTitleView(party: newParty))
+              );
             },
           ),
         ]
