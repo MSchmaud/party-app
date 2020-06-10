@@ -9,6 +9,16 @@ class AuthService {
     FirebaseUser user) => user?.uid,
   );
 
+  // Get userid
+  Future<String> getCurrentUID() async {
+    return (await _firebaseAuth.currentUser()).uid;
+  }
+
+  // GET CURRENT USER
+  Future getCurrentUser() async {
+    return await _firebaseAuth.currentUser();
+  }
+
   // Email and Password sign up
   Future<String> createUserWithEmailAndPassword(String email, String password, String username) async {
     final currentUser = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password,);
@@ -48,6 +58,7 @@ class EmailValidator {
   }
 }
 
+// Validates the username when creating account
 class UsernameValidator {
   static String validate(String value) {
     if(value.isEmpty) {
@@ -63,6 +74,7 @@ class UsernameValidator {
   }
 }
 
+// Validates the password when creating account
 class PasswordValidator {
   static String validate(String value) {
     if(value.isEmpty) {

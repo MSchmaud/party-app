@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:partyApp/services/auth_service.dart';
 import 'package:partyApp/widgets/provider.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 enum AuthFormType {signIn, signUp, reset}
 
@@ -314,7 +313,6 @@ class _SignUpViewState extends State<SignUpView> {
 
   // BUILD SOCIAL ICONS METHOD ====================================================================
   Widget buildSocialIcons(bool visible) {
-    final _auth = Provider.of(context).auth;
     return Visibility(
       child: Column(
         children: <Widget>[
