@@ -4,6 +4,7 @@ import 'package:partyApp/views/new_parties/details_view.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import 'dart:async';
 
+// View for selecting date of new party
 class NewPartyDateView extends StatefulWidget {
   final Party party;
   NewPartyDateView({Key key, @required this.party}) : super(key: key);
@@ -14,8 +15,10 @@ class NewPartyDateView extends StatefulWidget {
 
 class _NewPartyDateViewState extends State<NewPartyDateView> {
 
+  // Date variable for current date
   DateTime _date = DateTime.now();
 
+  // Displays the dateRange picker widget
   Future displayDateRangePicker(BuildContext ctxt) async {
     final List<DateTime> picked = await DateRangePicker.showDatePicker(
       context: ctxt,
@@ -25,7 +28,7 @@ class _NewPartyDateViewState extends State<NewPartyDateView> {
       lastDate: new DateTime(DateTime.now().year + 50));
       if(picked != null) {
         setState(() {
-          _date = picked[0];
+          _date = picked[0];    // Sets the date to the selected date
         });
       }
   }

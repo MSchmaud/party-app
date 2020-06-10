@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:partyApp/models/party.dart';
 import 'package:partyApp/views/new_parties/location_view.dart';
 
+// Initial page when creating new party
+// Lets user select title and theme
 class NewPartyTitleView extends StatelessWidget {
   final Party party;
   NewPartyTitleView({Key key, @required this.party}) : super(key: key);

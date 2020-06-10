@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:partyApp/widgets/provider.dart';
 
+// Page for giving details about the party such as description
 class NewPartyDetailsView extends StatelessWidget {
   final db = Firestore.instance;
   final Party party;
@@ -52,6 +53,8 @@ class NewPartyDetailsView extends StatelessWidget {
                   maxLines: null,
                 ),
               ),
+
+              // Shows all the data up to this point in creation process
               Text("Title: ${party.title}"),
               Text("Theme: ${party.theme}"),
               Text("Location: ${party.location}"),
@@ -61,14 +64,15 @@ class NewPartyDetailsView extends StatelessWidget {
               RaisedButton(
                 child: Text("Continue"),
                 onPressed: () async {
-                  // Save data to firebase
+                  // SAVE DATA TO FIREBASE
                   final uid = await Provider.of(ctxt).auth.getCurrentUID();
+
+                  party.description = _descriptionController.text;
+                  party.population = int.parse(_attendanceController.text);
 
                   await db.collection("parties").add(party.toJson());
                   await db.collection("userData").document(uid).collection("parties").add(party.toJson());
 
-                  party.description = _descriptionController.text;
-                  party.population = int.parse(_attendanceController.text);
                   Navigator.of(ctxt).popUntil((route) => route.isFirst);
                 },
               ),
