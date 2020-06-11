@@ -3,6 +3,7 @@ import 'package:partyApp/models/party.dart';
 import 'package:partyApp/views/new_parties/details_view.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRangePicker;
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 // View for selecting date of new party
 class NewPartyDateView extends StatefulWidget {
@@ -17,6 +18,7 @@ class _NewPartyDateViewState extends State<NewPartyDateView> {
 
   // Date variable for current date
   DateTime _date = DateTime.now();
+  final DateFormat _formatter = new DateFormat('MM-dd-yyyy');
 
   // Displays the dateRange picker widget
   Future displayDateRangePicker(BuildContext ctxt) async {
@@ -36,6 +38,8 @@ class _NewPartyDateViewState extends State<NewPartyDateView> {
   @override
   Widget build(BuildContext ctxt){
 
+    String _formatted = _formatter.format(_date); // Formats the date
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Party - Date'),
@@ -48,7 +52,7 @@ class _NewPartyDateViewState extends State<NewPartyDateView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text("Enter A Date*"),
+              Text("Selected: $_formatted"),
               RaisedButton(
                 child: Text("Select Date"),
                 onPressed: () async {
